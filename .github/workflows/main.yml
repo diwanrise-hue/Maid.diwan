@@ -7,10 +7,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: app
-
     steps:
       - uses: actions/checkout@v4
 
@@ -28,17 +24,17 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
-      - name: Prebuild Android
+      - name: Expo Prebuild
         run: npx expo prebuild --platform android
 
-      - name: Build APK via Gradle
+      - name: Build Android Release APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
 
-      - name: Upload APK Artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: maid-app-release
-          path: app/android/app/build/outputs/apk/release/*.apk
+          path: android/app/build/outputs/apk/release/*.apk
